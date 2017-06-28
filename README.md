@@ -1,2 +1,4 @@
 # QuestionPairs
 用于相似句子语义分析的网络
+restore.py 可以调用训练好的模型离线计算数据库中question的2000维向量表示，存在txt中
+qa_test.py 可以调用训练好的模型和question向量，实现和用户的对话
