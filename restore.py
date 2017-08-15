@@ -36,66 +36,66 @@ pool1=graph.get_operation_by_name('pooled_reshape_1').outputs[0]
 print(train_op)
 print(input1)
 print(pool1)
-# with tf.Session(config=session_conf) as sess:
-    # if ckpt and ckpt.model_checkpoint_path:
-        # saver.restore(sess,ckpt.model_checkpoint_path)
-    # else:
-        # pass
-    # try:
-        # i=int(0)
-        # while True:
-            # ques=datahelper.load_question_data(questionlist,vocab,i,batch_size)
-            # feed_dict = {input1:ques,dropout_keep_prob:1}
-            # features=sess.run(pool1,feed_dict)
-            # print("index: {}\n".format(i))
-            # for feature in features :
-                # value=[]
-                # for j in range(0,2000):
-                    # value.append(feature[j])
-                # featureList.append(value)
-            # i+=batch_size
-            # if i>=len(questionlist):
-                # print('out of questionlist')
-                # break
-        # sessdict = {}
-        # index = int(0)
-        # resName = "./qid_question_head_feature" + ".txt"
-        # if os.path.exists(resName):
-            # os.remove(resName)
-        # result = codecs.open(resName, 'w', 'utf-8')  
-        # file=codecs.open(ques_file,'r',encoding='utf-8')
-        # line=file.readline() 
-        # while line!='':
-          # #for line in open(val_file):
-            # items = line.strip().split(' ')
-            # if len(items)==2:
-                # if len(items[1].strip().split('_'))==101:
-                    # qid = items[0].split(':')[1]
-                    # qid=int(qid)
-                    # if not qid in sessdict:
-                        # sessdict[qid] = []
-                    # sessdict[qid].append((featureList[index]))
-                    # index += 1
-                    # print('score index:'+str(index))
-                # #print("line:{}".format(line))
-                # #if index>=4000:
-                    # if index >= len(questionlist):
-                        # print('index out of testlist: {}\n'.format(index))
-                        # break
-                    # if index >=len(featureList):
-                        # print('index out of scorelist: {}\n'.format(len(featureList)))
-                        # break
-                # else:
-                    # print('not complete line: '+str(line))
-            # else:
-                # print('not complete line: '+str(line))
-            # line=file.readline()
-        # for k, v in sessdict.items():
-        # #v.sort(key=operator.itemgetter(0), reverse=True)
-            # result.write('qid:'+str(k)+'_'+str(v)+'\n')
-        # #print('qid'+str(k))
-        # print('done')
-        # result.close()
-    # except Exception as e:
-        # print(e)
-        # traceback.print_exc()
+with tf.session(config=session_conf) as sess:
+    if ckpt and ckpt.model_checkpoint_path:
+        saver.restore(sess,ckpt.model_checkpoint_path)
+    else:
+        pass
+    try:
+        i=int(0)
+        while true:
+            ques=datahelper.load_question_data(questionlist,vocab,i,batch_size)
+            feed_dict = {input1:ques,dropout_keep_prob:1}
+            features=sess.run(pool1,feed_dict)
+            print("index: {}\n".format(i))
+            for feature in features :
+                value=[]
+                for j in range(0,2000):
+                    value.append(feature[j])
+                featurelist.append(value)
+            i+=batch_size
+            if i>=len(questionlist):
+                print('out of questionlist')
+                break
+        sessdict = {}
+        index = int(0)
+        resname = "./qid_question_head_feature" + ".txt"     ####存放question vector的目录
+        if os.path.exists(resname):
+            os.remove(resname)
+        result = codecs.open(resname, 'w', 'utf-8')  
+        file=codecs.open(ques_file,'r',encoding='utf-8')
+        line=file.readline() 
+        while line!='':
+          #for line in open(val_file):
+            items = line.strip().split(' ')
+            if len(items)==2:
+                if len(items[1].strip().split('_'))==101:
+                    qid = items[0].split(':')[1]
+                    qid=int(qid)
+                    if not qid in sessdict:
+                        sessdict[qid] = []
+                    sessdict[qid].append((featurelist[index]))
+                    index += 1
+                    print('score index:'+str(index))
+                #print("line:{}".format(line))
+                #if index>=4000:
+                    if index >= len(questionlist):
+                        print('index out of testlist: {}\n'.format(index))
+                        break
+                    if index >=len(featurelist):
+                        print('index out of scorelist: {}\n'.format(len(featurelist)))
+                        break
+                else:
+                    print('not complete line: '+str(line))
+            else:
+                print('not complete line: '+str(line))
+            line=file.readline()
+        for k, v in sessdict.items():
+        #v.sort(key=operator.itemgetter(0), reverse=true)
+            result.write('qid:'+str(k)+'_'+str(v)+'\n')
+        #print('qid'+str(k))
+        print('done')
+        result.close()
+    except exception as e:
+        print(e)
+        traceback.print_exc()
